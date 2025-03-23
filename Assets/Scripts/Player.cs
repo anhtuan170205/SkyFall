@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             GameManager.Instance.GameOver();
+            AudioManager.Instance.PlayGameOverClip();
         }
     }
     private void GameManager_OnGameStarted()

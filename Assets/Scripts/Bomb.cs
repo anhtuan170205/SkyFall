@@ -14,6 +14,7 @@ public class Bomb : MonoBehaviour
             OnBombExploded?.Invoke();
             Instantiate(explosionVfxPrefab, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
+            AudioManager.Instance.PlayExplosionClip();
         }
     }
 }
