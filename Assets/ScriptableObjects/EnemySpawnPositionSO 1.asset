@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EnemySpawnPositionSO 1
   m_EditorClassIdentifier: 
   enemyPositionX: -2
-  enemyPositionY: -5
+  enemyPositionY: -7

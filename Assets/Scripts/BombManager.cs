@@ -9,6 +9,8 @@ public class BombManager : MonoBehaviour
     [SerializeField] private int bombPoolSize = 10;
     [SerializeField] private Player player;
 
+    private bool isGameStarted = false;
+    private bool isGameOver = false;
     private List<GameObject> bombPool = new List<GameObject>();
     private Dictionary<GameObject, int> bombTimers = new Dictionary<GameObject, int>();
     private int bombIdCounter = 0;
@@ -29,13 +31,31 @@ public class BombManager : MonoBehaviour
     private void Start()
     {
         PreloadBombs();
+        GameManager.Instance.OnGameStarted += GameManager_OnGameStarted;
+        GameManager.Instance.OnGameOver += GameManager_OnGameOver;
     }
 
     private void Update()
     {
+        if (!isGameStarted || isGameOver)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             SpawnBomb();
+        }
+    }
+
+    private void RestartGame()
+    {
+        isGameStarted = true;
+        isGameOver = false;
+        bombIdCounter = 0;
+        bombTimers.Clear();
+        foreach (GameObject bomb in bombPool)
+        {
+            bomb.SetActive(false);
         }
     }
 
@@ -83,5 +103,15 @@ public class BombManager : MonoBehaviour
                 return bomb;
         }
         return null;
+    }
+
+    private void GameManager_OnGameStarted()
+    {
+        RestartGame();
+    }
+
+    private void GameManager_OnGameOver()
+    {
+        isGameOver = true;
     }
 }

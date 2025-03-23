@@ -8,13 +8,15 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private int enemyPoolSize = 20;
-    [SerializeField] private float spawnRate = 0.005f;
+    [SerializeField] private float spawnRate = 1f;
     [SerializeField] private List<EnemySpawnPositionSO> enemySpawnPositionList;
 
     private Dictionary<GameObject, int> enemyTimers = new Dictionary<GameObject, int>();
     private int timerIdCounter = 0;
     private List<GameObject> enemyPool = new List<GameObject>();
     private float nextSpawn = 0f;
+    private bool isGameStarted = false;
+    private bool isGameOver = false;
 
     private void Awake()
     {
@@ -32,16 +34,29 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         PreloadEnemies();
+        ScoreManager.Instance.OnEveryXScore += ScoreManger_OnEveryXScore;
+        GameManager.Instance.OnGameStarted += GameManager_OnGameStarted;
+        GameManager.Instance.OnGameOver += GameManager_OnGameOver;
     }
 
     private void Update()
     {
+        if (!isGameStarted || isGameOver)
+        {
+            return;
+        }
         nextSpawn -= Time.deltaTime;
         if (nextSpawn <= 0f)
         {
             SpawnEnemy();
             nextSpawn = spawnRate;
         }
+    }
+
+    private void RestartGame()
+    {
+        isGameStarted = true;
+        isGameOver = false;
     }
 
     private void PreloadEnemies()
@@ -96,4 +111,23 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    private void ScoreManger_OnEveryXScore()
+    {
+        spawnRate *= 0.75f;
+    }
+    private void GameManager_OnGameStarted()
+    {
+        RestartGame();
+    }
+    private void GameManager_OnGameOver()
+    {
+        isGameOver = true;
+        timerIdCounter = 0;
+        nextSpawn = 0f;
+        spawnRate = 1;
+        foreach (GameObject enemy in enemyPool)
+        {
+            enemy.SetActive(false);
+        }
+    }
 }
