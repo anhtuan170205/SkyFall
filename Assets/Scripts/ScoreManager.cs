@@ -50,7 +50,6 @@ public class ScoreManager : MonoBehaviour
     {
         score = 0;
         OnScoreChanged?.Invoke();
-        Debug.Log("Score reset");
     }
     private void GameManager_OnGameStarted()
     {

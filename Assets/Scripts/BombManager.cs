@@ -14,6 +14,9 @@ public class BombManager : MonoBehaviour
     private List<GameObject> bombPool = new List<GameObject>();
     private Dictionary<GameObject, int> bombTimers = new Dictionary<GameObject, int>();
     private int bombIdCounter = 0;
+    public event Action OnBombSpawned;
+    private bool canShoot = true;
+    [SerializeField] private float shootDelay = 0.5f;
 
     private void Awake()
     {
@@ -41,10 +44,18 @@ public class BombManager : MonoBehaviour
         {
             return;
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canShoot)
         {
             SpawnBomb();
+            StartCoroutine(ShootCooldownRoutine());
         }
+    }
+
+    private IEnumerator ShootCooldownRoutine()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(shootDelay);
+        canShoot = true;
     }
 
     private void RestartGame()
@@ -80,6 +91,7 @@ public class BombManager : MonoBehaviour
 
             int token = ++bombIdCounter;
             bombTimers[bomb] = token;
+            OnBombSpawned?.Invoke();
 
             StartCoroutine(DeactivateBombAfterTime(bomb, 3f, token));
         }

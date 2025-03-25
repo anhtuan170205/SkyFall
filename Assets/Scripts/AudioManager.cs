@@ -28,13 +28,13 @@ public class AudioManager : MonoBehaviour
     }
     public void PlayExplosionClip()
     {
-        PlaySoundClip(explosionClip, 0.5f);
+        PlaySoundClip(explosionClip, 0.1f);
     }
     public void PlayGameOverClip()
     {
-        PlaySoundClip(gameOverClip, 1f);
+        PlaySoundClip(gameOverClip, 0.1f);
     }
-    public void PlaySoundClip(AudioClip clip, float volume = 0.5f)
+    public void PlaySoundClip(AudioClip clip, float volume)
     {
         AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, volume);
     }
@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviour
         AudioSource audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = backgroundMusic;
         audioSource.loop = true;
-        audioSource.volume = 1f;
+        audioSource.volume = 0.1f;
         audioSource.Play();
     }
 

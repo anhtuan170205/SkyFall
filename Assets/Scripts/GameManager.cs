@@ -51,8 +51,8 @@ public class GameManager : MonoBehaviour
     }
     public void ReturnToMenu()
     {
-        OnReturnToMenu?.Invoke();
         OnGameOver?.Invoke();
+        OnReturnToMenu?.Invoke();
         Time.timeScale = 0;
     }
     public void GameOver()

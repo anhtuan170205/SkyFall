@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -20,21 +21,25 @@ public class Player : MonoBehaviour
         UpdatePlayerPosition();
     }
 
-    private void UpdatePlayerPosition()
+private void UpdatePlayerPosition()
+{
+    if (!isGameStarted || isGamePaused)
     {
-        if (!isGameStarted)
-        {
-            return;
-        }
-        if (isGamePaused)
-        {
-            return;
-        }
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
-        int clampedX = Mathf.Clamp(Mathf.RoundToInt(mousePosition.x), -2, 2);
-        transform.position = new Vector3(clampedX, transform.position.y, 0);
+        return;
     }
+
+    mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    mousePosition.z = 0;
+
+    float step = 1.0f;
+    float offset = 0.5f;
+    float roundedX = Mathf.Round((mousePosition.x - offset) / step) * step + offset;
+
+    roundedX = Mathf.Clamp(roundedX, -1.5f, 1.5f);
+
+    transform.position = new Vector3(roundedX, transform.position.y, 0);
+}
+
 
     public Vector3 GetPlayerPosition()
     {

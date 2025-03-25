@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemySpawnPositionSO", menuName = "ScriptableObject/EnemySpawnPositionSO", order = 0)]
 public class EnemySpawnPositionSO : ScriptableObject 
 {
-    public int enemyPositionX;
+    public float enemyPositionX;
     public int enemyPositionY;
 }
 
